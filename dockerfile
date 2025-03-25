@@ -1,7 +1,15 @@
-# Usar una imagen oficial de PHP con soporte para Laravel
+# Etapa 1: Construir los activos de frontend con Node.js
+FROM node:18 AS node-build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Etapa 2: Configurar Laravel con PHP
 FROM php:8.2-fpm
 
-# Instalar dependencias necesarias
+# Instalar dependencias para PHP y extensiones requeridas por Laravel
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
@@ -19,16 +27,24 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Configurar el directorio de trabajo
 WORKDIR /var/www
 
-# Copiar archivos del proyecto
+# Copiar los archivos del proyecto
 COPY . .
 
-# Instalar dependencias de PHP
+# Copiar los activos generados por Node.js
+COPY --from=node-build /app/public/build public/build
+
+# Instalar dependencias de Laravel
 RUN composer install --optimize-autoloader --no-dev
 
-# Configurar permisos
-RUN chown -R www-data:www-data /var/www
+# Crear el enlace simbólico para storage
+RUN php artisan storage:link
 
-# Exponer el puerto 8080 para Laravel
+# Cache de configuración y rutas
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
+
+# Exponer el puerto para Laravel
 EXPOSE 8080
 
 # Comando de inicio
