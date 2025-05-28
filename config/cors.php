@@ -28,6 +28,7 @@ return [
 
     'allowed_origins' => [
         'http://localhost:5173',
+        'https://nefrosalutweb.netlify.app',
     ],
 
     'allowed_origins_patterns' => [],
