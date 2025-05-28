@@ -1,0 +1,85 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Plato;
+use App\Models\DietaPlato;
+use Illuminate\Http\Request;
+
+class PlatosController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $platos = Plato::all();
+        return response()->json($platos, 200);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $plato = Plato::create($request->all());
+        return response()->json([
+            $plato
+        ], 201);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $plato = Plato::findOrFail($id);
+        return response()->json([
+            $plato
+        ], 200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $plato = Plato::findOrFail($id);
+        $plato->update($request->all());
+        return response()->json([
+            $plato
+        ], 200);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $plato = Plato::findOrFail($id);
+        $plato->delete();
+        return response()->json([], 200);
+    }
+
+    public function platosCategoria(string $categoria) {
+        $platos = Plato::where("categoria", $categoria)->get();
+        $finalResult = [];
+        if ($platos->count()==1) {
+            foreach ($platos as $item) {
+                $finalResult[] = $item;
+            }
+            return response()->json($finalResult, 200);
+        }
+        else {
+            foreach ($platos as $item) {
+                $finalResult[] = $item;
+            }
+            return response()->json($finalResult, 200);
+        }
+    }
+
+    public function platosDietaEliminar(string $id) {
+        DietaPlato::where("plato_id", $id)->delete();
+        return response()->json(["mensaje"=>"este plato ya no esta asignado a ninguna dieta"], 200);
+    }
+}
