@@ -28,7 +28,7 @@ class DietaController extends Controller
         $dieta = Dieta::create($request->all());
         $rol = $request->rol;
         $idUsuario = $request->usuario;
-        if ($rol == "familiar") {
+        if ($rol == "Familiar") {
             $pacienteDieta = PacienteDieta::create([
                 'dieta_id' => $dieta->id,
                 'familiar_id' => $idUsuario,
@@ -38,7 +38,7 @@ class DietaController extends Controller
                 $pacienteDieta
             ], 201);
         }
-        else if ($rol == "paciente") {
+        else if ($rol == "Paciente") {
             $pacienteDieta = PacienteDieta::create([
                 'dieta_id' => $dieta->id,
                 'paciente_id' => $idUsuario,
