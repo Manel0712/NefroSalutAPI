@@ -32,8 +32,8 @@ class PacienteController extends Controller
         $passwordHash = Hash::make($password);
         $progreso = Progreso::create([
             'power_ups' => (object) [
-                'porDos' => 0,
-                'disolver' => 0,
+                "porDos" => 0,
+                "disolver" => 0,
             ],
             'monedas' => 0,
             'puntos' => 0
