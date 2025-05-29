@@ -34,7 +34,7 @@ class PacienteController extends Controller
             'power_ups' => json_encode((object) [
                 "porDos" => 0,
                 "disolver" => 0,
-            ]),
+            ], true),
             'monedas' => 0,
             'puntos' => 0
         ]);
