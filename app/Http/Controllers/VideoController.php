@@ -56,7 +56,7 @@ class VideoController extends Controller
     {
         $video = Video::findOrFail($id);
         $video->delete();
-        return response()->json([], 204);
+        return response()->json([], 200);
     }
 
     public function videosCategoria(string $nombre) {
